@@ -10,7 +10,7 @@ class Study:
         self.token = token
         self.endpoint = endpoint
 
-        self.study_id = requests.post(self.endpoint + "new_experiment", json={'parameters': params,
+        self.study_id = requests.post(self.endpoint + "NewStudy", json={'parameters': params,
                                                          'experiment_name': study_name,
                                                          "algorithm": "NeverGrad",
                                                          "auth_token": token}).json()
@@ -18,7 +18,7 @@ class Study:
     def ask(self):
         params = []
         while len(params) == 0:
-            r = requests.get(self.endpoint + "params/" + self.study_id)
+            r = requests.get(self.endpoint + "ask/" + self.study_id)
             r.encoding = 'UTF-8'
             params = r.json()
         return params
@@ -26,7 +26,7 @@ class Study:
 
     def tell(self, params, output):
     	requests.post(
-                self.endpoint + "register", json={"inputs": params, "output": output, "experiment_id": self.study_id})
+                self.endpoint + "tell", json={"inputs": params, "output": output, "experiment_id": self.study_id})
 
 
 #study = Study("test1", {'x': {'number': 'continuous'}}, token="17a3ae3404414c26a043cdafc3c47cb4")
